@@ -128,9 +128,106 @@ This selects all the employee whose ph_no column is NUll we can also use is not 
 
     SELECT * FROM employee WHERE ph_no IS NULL;
 
+### To update databse column 
+This update the ph_no of employee with id =1 in employee table we can also update multiple values by seperating SET x=x,y=y etc 
+Note: If you want to update in all the column just exclude the WHERE clause 
+
+    UPDATE employee SET ph_no="94876893" WHERE employee_id=1;
+
+### To delete all the row in the table 
+This deletes all the row in the employee table 
+
+    DELETE FROM employee;
+
+### To delete a specific row 
+This delete the row where the employee id is equals to 1 
+
+    DELETE FROM employee WHERE employee_id=1;
+
+### To create a safepoint using auto commit 
+By default the AUTOCOMMIT is on and when we make changes it directy saves those changes but with the AUTOCOMMIT off we need to use COMMIT; after we make some change to the database 
+
+    SET AUTOCOMMIT = OFF;
+
+Suppose you have set AUTOCOMMIT to OFF and you mistakly deleted the emploee table all rows 
+
+    DELETE FROM employee;
+
+To get your changes back use this commad you get your mistakly deleted data back 
+
+    ROLLBACK;
+
+And If you are sure about deleting the data instead of getting it back use this 
+
+    COMMIT;
+
+### To add current date,time and datetime
+This helps to  add the current date ,current time , and current datetime in to test table 
+
+    INSERT INTO test VALUE(CURRENT_DATE(),CURRENT_TIME(),NOW());
 
 
+### To add a unique constraint in MySQL 
+we can see there a unique constraint in the id of the product table  
 
 
- 
+    CREATE TABLE products
+    (
+    id INT UNIQUE,
+    title VARCHAR,
+    price DECIMAL(4,2),
+    );
+
+### To add unique constraint after the table is defined 
+If you forger to include the unique constraint in table at the time of creating it you can modify it later this way. In here we have added a unique constraint after the product table is created 
+
+    ALTER TABLE product ADD CONSTRAINT UNIQUE(id);
+
+
+### To create table column that cant be left empty 
+This NOT NULL is used to specify that the column has be left NULL 
+
+    CREATE TABLE product (
+    id INT NOT NULL,
+    title VARCHAR(50) NOT NULL
+    );
+
+### To add not null on existing table 
+This makes the price column on the existing table products not nullable 
+
+    ALTER TABLE products MODIFY price DECIMAL(4,2) NOT NULL;
+
+### To add check constraint
+This helps to check if the price is greater to or equals to 10 while creating a product table 
+Note: In this case the check will forbid any insertion of price smaller than 10.
+
+    create table product(
+    id int not null unique,
+    title varchar not null,
+    price decimal(4,2) not null,
+    constraint price_check check (price>=10)
+    );
+
+### To add the check constraint on existing table 
+This helps to modify the table and add the check constraint named price_check in the product table 
+
+    ALTER TABLE product ADD CONSTRAINT  price_check CHECK(price>=10); 
+
+### To delete a check 
+This helps to delete the check named price_check from the product table 
+
+    ALTER TABLE product DROP CHECK price_check;
+
+### To add the default constraint 
+This helps to add the default value 0 in the price while creating it 
+
+    create table test(
+    id int not null unique,
+    price decimal(4,2) not null default 0
+    );
+
+### To add the default constraint on existing table
+This helps to add the default constraint for the existing table  
+
+    ALTER TABLE product ALTER price SET DEFAULT 0;
 
