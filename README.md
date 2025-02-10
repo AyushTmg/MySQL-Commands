@@ -231,3 +231,122 @@ This helps to add the default constraint for the existing table
 
     ALTER TABLE product ALTER price SET DEFAULT 0;
 
+### To Use Group Clause 
+This helps of get list of common category in the sales table and sum of those category price 
+
+    SELECT category, SUM(price) AS total_price FROM sales GROUP BY category;
+
+
+### Store Procedure in SQL 
+A Stored Procedure is a set of SQL statements that are saved in the database and can be executed whenever needed. its like a function in programming
+
+The DELIMITER in MySQL is used to change the default ; (semicolon) delimiter so that MySQL doesn't stop execution too early when defining procedures, triggers, or functions.
+
+    ## In this case we have change the delimiter to // for creating 
+    procedure and againg changing it back to the semicolon
+
+    DELIMITER //
+
+    CREATE PROCEDURE GetStudentsByAge(IN student_age INT)
+    BEGIN
+        SELECT * FROM students WHERE age = student_age;
+    END //
+
+    DELIMITER ;
+
+    ## We can call the procedure this way next time to execute this query 
+
+    CALL GetStudentsByAge(22);
+
+This is the example of a dynamic procedure which takes the student age to 
+query we can even create procedure with takes no parameters 
+
+###  To Drop Procedure
+
+    Drop Procedure [procedure_name];
+
+### Triggers In SQL 
+
+A trigger is a special SQL code that runs before or after INSERT, UPDATE, or DELETE operations on a table.
+
+    # this triggers insert the new record in the audit log table 
+    # about before updation of user table 
+      
+    CREATE TRIGGER before_user_update
+    BEFORE UPDATE ON users
+    FOR EACH ROW
+    INSERT INTO audit_log (user_id, action, changed_at)
+    VALUES (OLD.id, 'User updated', NOW());
+
+Another Example of trigger 
+
+    # This triggers updates the total price column with 
+    new updated quantity and unit_price before update on table orders 
+
+    CREATE TRIGGER before_order_insert
+    BEFORE UPDATE ON orders
+    FOR EACH ROW
+    SET NEW.total_price = (NEW.quantity * NEW.unit_price);
+
+### To see all the triggers in the database 
+
+    show triggers; 
+
+
+### On Delete Clause In SQL 
+
+The ON DELETE clause in SQL is used to define what happens when a referenced row in a parent table is deleted. It is mostly used in foreign key constraints to maintain referential integrity.
+
+### Types of ON DELETE Actions
+- ON DELETE CASCADE → Deletes related rows in the child table when the parent row is deleted.
+- ON DELETE SET NULL → Sets the foreign key column to NULL instead of deleting the row.
+- ON DELETE RESTRICT → Prevents deletion if there are related records in the - child table.
+- ON DELETE NO ACTION → Similar to RESTRICT, but follows SQL standards.
+
+        # Creation of table with the foreign key to customer table 
+        customer id and when the foreign key is deleted its related
+        orders are also deleted in this case because of Cascase on 
+        delete clause 
+
+        CREATE TABLE orders (
+            id INT PRIMARY KEY,
+            customer_id INT,
+            order_details VARCHAR(255),
+            FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+        );
+
+### Joins In SQL 
+
+Suppose We have two tables:
+
+employees – Stores employee details has foreign key with departments table column department_id.
+departments – Stores department details.
+
+### Best Way to Think About Join
+INNER JOIN → Intersection (Only matching data from both tables)
+LEFT JOIN → All from the Left + Matching from Right
+RIGHT JOIN → All from the Right + Matching from Left
+
+
+Inner Join 
+Suppose we want to find the employees with the departments 
+
+    SELECT employees.id, employees.name, departments.department_name 
+    FROM employees 
+    INNER JOIN departments ON employees.department_id = departments.id;
+
+Left Join  
+Suppose we want to show the employees with the departments plus all the employes with out the departments from the employee table too 
+
+    SELECT employees.id, employees.name, departments.department_name 
+    FROM employees 
+    LEFT JOIN departments ON employees.department_id = departments.id;
+
+
+Right Join  
+Suppose we want to show the employees with the departments plus all the department in the departments table too 
+
+    SELECT employees.id, employees.name, departments.department_name 
+    FROM employees 
+    LEFT JOIN departments ON employees.department_id = departments.id;
+
