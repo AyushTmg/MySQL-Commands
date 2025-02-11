@@ -237,6 +237,17 @@ This helps of get list of common category in the sales table and sum of those ca
     SELECT category, SUM(price) AS total_price FROM sales GROUP BY category;
 
 
+### To Add Foregin Key In Table 
+In this query we have created a table Orders which has foreign key as user_id which references the user_id column for the Users Table 
+
+    CREATE TABLE Orders (
+        order_id INT PRIMARY KEY,
+        user_id INT,  -- Foreign Key referring to Users table
+        order_date DATE,
+        total_amount DECIMAL(10,2),
+        FOREIGN KEY (user_id) REFERENCES Users(user_id)  -- FK Constraint
+    );
+
 ### Store Procedure in SQL 
 A Stored Procedure is a set of SQL statements that are saved in the database and can be executed whenever needed. its like a function in programming
 
@@ -350,3 +361,21 @@ Suppose we want to show the employees with the departments plus all the departme
     FROM employees 
     LEFT JOIN departments ON employees.department_id = departments.id;
 
+### Indexing In MYSQL 
+
+Indexing is used to search using a tables column more efficiently and fast 
+
+    # To create a index 
+    Create Index [index_name]
+    On [table_name( [it's column_name]) ];
+
+    # To view indexes from a specific table 
+    Show indexes from [table_name]'
+
+### To Limit Data IN SQL 
+    #This is used for pagination for loading useful while working 
+    with a lot of data
+    #In this case it only shows 3 data from the customer table because of
+    limit clause to 3 
+    
+    Select * from customer limit 3;
